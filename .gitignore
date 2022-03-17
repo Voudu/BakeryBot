@@ -1,0 +1,10 @@
+# python stuff
+__pycache__/
+
+
+# Virtual environment and env vars
+.env
+venv/
+
+# Personal junk
+notes.txt
