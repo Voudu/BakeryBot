@@ -5,6 +5,7 @@ __pycache__/
 # Virtual environment and env vars
 .env
 venv/
+Lib/
 
 # Personal junk
 notes.txt
