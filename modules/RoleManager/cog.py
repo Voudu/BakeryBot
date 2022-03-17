@@ -183,7 +183,7 @@ class RoleManager(commands.Cog, name="Role Manager Cog"):
         guild_id = ctx.message.guild.id
 
         try:
-            with open(f'modules/RoleManager/role_data/{guild_id}.json') as f:
+            with open(f'modules/RoleManager/dat/{guild_id}.json') as f:
                 self._msg_role_dict = json.load(f)
         except FileNotFoundError as fe:
             print(fe)
