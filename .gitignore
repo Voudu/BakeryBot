@@ -1,11 +1,13 @@
 # python stuff
 __pycache__/
 
-
 # Virtual environment and env vars
 .env
 venv/
 Lib/
+
+#json
+*.json
 
 # Personal junk
 notes.txt

@@ -1,4 +1,4 @@
-from discord.ext import commands
+from disnake.ext import commands
 
 class ChatManager(commands.Cog, name="ChatManager Cog"):
 

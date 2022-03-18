@@ -1,10 +1,9 @@
+from dotenv import load_dotenv
+from disnake.ext.commands import Bot
+
 import sys
 import os
-from dotenv import load_dotenv
-import discord
-from discord.ext import commands
-from discord_slash import SlashCommand, SlashContext
-from discord_slash.utils.manage_commands import create_choice, create_option
+import disnake
 
 load_dotenv()
 token = os.getenv("TOKEN")
@@ -12,11 +11,11 @@ token = os.getenv("TOKEN")
 sys.path.append(".")
 
 def main():
-    client = commands.Bot(command_prefix="!")
+    client = Bot(command_prefix="!")
 
     @client.event
     async def on_ready():
-        print(f"{client.user.name} has connected to Discord")
+        print(f"{client.user.name} has connected to disnake")
 
     for folder in os.listdir("modules"):
         if os.path.exists(os.path.join("modules", folder, "cog.py")):
