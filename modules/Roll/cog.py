@@ -1,6 +1,7 @@
 import random
 import sys
 from discord.ext import commands
+import discord
 
 DIE_TYPES = [4, 6, 8, 10, 12, 20]
 
@@ -47,5 +48,5 @@ class Roll(commands.Cog, name="Roll Cog"):
         else:
             print(f'{ctx.message.author.display_name} used Roll')
 
-def setup(bot: commands.Bot):
-    bot.add_cog(Roll(bot))
+async def setup(bot: commands.Bot):
+    await bot.add_cog(Roll(bot), guilds=[discord.Object(id=633847600403054592)])

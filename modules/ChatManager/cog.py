@@ -1,3 +1,4 @@
+import discord
 from discord.ext import commands
 
 class ChatManager(commands.Cog, name="ChatManager Cog"):
@@ -36,5 +37,5 @@ class ChatManager(commands.Cog, name="ChatManager Cog"):
         self.bot_ignore = False
 
 
-def setup(bot: commands.Bot):
-    bot.add_cog(ChatManager(bot))
+async def setup(bot: commands.Bot):
+    await bot.add_cog(ChatManager(bot), guilds=[discord.Object(id=633847600403054592)])
