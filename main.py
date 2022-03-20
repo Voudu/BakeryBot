@@ -30,6 +30,15 @@ def main():
             if os.path.exists(os.path.join("modules", folder, "cog.py")):
                 await client.load_extension(f"modules.{folder}.cog")
 
+    # TODO
+    # await bot.tree.sync(guild = discord.Object(id= guild_id))
+
+    # TODO
+    # implement the following
+    # async def close(self):
+    #   await super().close()
+    #   await self.sessions.close()
+
     # should learn how to move this to an environment variable
     client.run(token)
 
