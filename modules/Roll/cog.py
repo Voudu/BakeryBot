@@ -1,6 +1,6 @@
 import random
 import sys
-from disnake.ext import commands
+from discord.ext import commands
 
 DIE_TYPES = [4, 6, 8, 10, 12, 20]
 

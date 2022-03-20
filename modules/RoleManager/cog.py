@@ -1,6 +1,7 @@
-import disnake
-from disnake.ext import commands
-import disnake
+import discord
+from discord import app_commands
+from discord.ext import commands
+
 import re
 import json
 import emoji
@@ -43,9 +44,16 @@ class RoleManager(commands.Cog, name="Role Manager Cog"):
                                     #
 
     # Create a new embed template which we can add to
-    @commands.slash_command(name="roleinit", description="role initializer")
+    @app_commands.command(
+        name="roleinit",
+        description="Initializes and embed which we can add role choices to"
+    )
+    @app_commands.describe(
+        hex="Hex color code",
+        title="Title for embed header"
+    )
     @commands.has_permissions(administrator=True)       
-    async def roleinit(self, ctx, hex, *title):
+    async def roleinit(self, ctx:commands.Context, hex, *title):
         """
         !roleinit hex, title
 
@@ -84,7 +92,7 @@ class RoleManager(commands.Cog, name="Role Manager Cog"):
             hexCode = 0xFFFFFF              # as a precaution in case we get past this point
 
         title = " ".join(title)             # gets rid of title as a list and makes it one string
-        embed = disnake.Embed(              # create a disnake embed message
+        embed = discord.Embed(              # create a discord embed message
             title=f"{title}",
             description=f"",
             color=hexCode,
@@ -141,7 +149,7 @@ class RoleManager(commands.Cog, name="Role Manager Cog"):
         role_id = at_role_split[0]                                               # role id is at 0
         role_id = int(role_id)                                                   # convert role id from string to int
 
-        role = disnake.utils.find(lambda r: r.id == role_id, ctx.guild.roles)    # check if the role exists in the server first
+        role = discord.utils.find(lambda r: r.id == role_id, ctx.guild.roles)    # check if the role exists in the server first
 
         if role is None:
             print("This role was not found")
@@ -177,8 +185,9 @@ class RoleManager(commands.Cog, name="Role Manager Cog"):
         pass
 
     # load data from a file, json
-    def loadObj(self, ctx: commands.Context):
+    def loadObj(self, ctx):
 
+        #guild_id = ctx.message.guild.id
         guild_id = ctx.message.guild.id
 
         try:
@@ -189,8 +198,9 @@ class RoleManager(commands.Cog, name="Role Manager Cog"):
 
 
     # write object data to a file, json
-    def writeObj(self, ctx: commands.Context):
+    def writeObj(self, ctx):
     
+        #guild_id = ctx.message.guild.id
         guild_id = ctx.message.guild.id
         
         try:
@@ -200,7 +210,7 @@ class RoleManager(commands.Cog, name="Role Manager Cog"):
             print(fe)
 
     @commands.Cog.listener()
-    async def on_raw_reaction_add(self, payload: disnake.RawReactionActionEvent):
+    async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
 
         if payload.member == self.bot.user:
             print("Ignored bot adding emoji")
@@ -239,7 +249,7 @@ class RoleManager(commands.Cog, name="Role Manager Cog"):
             print("role added to member")
 
     @commands.Cog.listener()
-    async def on_raw_reaction_remove(self, payload: disnake.RawReactionActionEvent):
+    async def on_raw_reaction_remove(self, payload: discord.RawReactionActionEvent):
         msgId = payload.message_id
         print(msgId)
 
