@@ -122,7 +122,7 @@ class RoleManager(commands.Cog, name="Role Manager Cog"):
     # )
     @commands.command(pass_context=True)
     @commands.has_permissions(administrator=True)       # make sure the person executing has permissions
-    async def roleSetDesc(self, ctx: commands.Context, msg_id, *descr):
+    async def rolesetdesc(self, ctx: commands.Context, msg_id, *descr):
 
         msg = await ctx.fetch_message(msg_id)
 
