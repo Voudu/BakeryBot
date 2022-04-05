@@ -12,27 +12,22 @@ guild_id = os.getenv("GUILD_ID")
 
 sys.path.append(".")
 
-class MyBot(commands.Bot):
-    def __init__(self):
-        super().__init__(
-            command_prefix="!",
-            intents=discord.Intents.all(),
-            application_id=app_id
-        )
+def main():
+    client = commands.Bot(
+        command_prefix="!",
+        intents=discord.Intents.all(),
+        application_id=app_id
+    )
 
-    async def setup_hook(self):
-        for folder in os.listdir("modules"):
-            if os.path.exists(os.path.join("modules", folder, "cog.py")):
-                await self.load_extension(f"modules.{folder}.cog")
+    @client.event
+    async def on_ready():
+        print(f"{client.user.name} has connected to discord")
 
-        await self.tree.sync(guild = discord.Object(id=guild_id))
+    for folder in os.listdir("modules"):
+        if os.path.exists(os.path.join("modules", folder, "cog.py")):
+            client.load_extension(f"modules.{folder}.cog")
+    
+    client.run(token)
 
-    # async def close(self):
-    #     await super().close()
-    #     await self.session.close()
-
-    async def on_ready(self):
-        print(f"{self.user.name} has connected to discord")
-
-bot = MyBot()
-bot.run(token)
+if __name__ == '__main__':
+    main()
