@@ -48,5 +48,5 @@ class Roll(commands.Cog, name="Roll Cog"):
         else:
             print(f'{ctx.message.author.display_name} used Roll')
 
-async def setup(bot: commands.Bot):
-    await bot.add_cog(Roll(bot), guilds=[discord.Object(id=633847600403054592)])
+def setup(bot: commands.Bot):
+    bot.add_cog(Roll(bot))

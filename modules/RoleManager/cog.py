@@ -1,6 +1,6 @@
-from pydoc import describe
+# from pydoc import describe
 import discord
-from discord import app_commands
+# from discord import app_commands
 from discord.ext import commands
 
 import re
@@ -26,6 +26,7 @@ import emoji
 #                   -> this might need some tweaking?
 #   - rolesetchannel -> start implementation
 #   - create list of guild objects, each guild object holds that corresponding guilds data -> this is not very important considering this is only intended to run on 1 server. Good practice though
+#   - if a message is in the list but no longer exists in the server, we should remove it from the list
 
 class RoleManager(commands.Cog, name="Role Manager Cog"):
 
@@ -319,5 +320,5 @@ class RoleManager(commands.Cog, name="Role Manager Cog"):
         except FileNotFoundError as fe:
             print(fe)
 
-async def setup(bot: commands.Bot):
-    await bot.add_cog(RoleManager(bot), guilds=[discord.Object(id=633847600403054592)])
+def setup(bot: commands.Bot):
+    bot.add_cog(RoleManager(bot))

@@ -8,6 +8,19 @@ class ChatManager(commands.Cog, name="ChatManager Cog"):
         self.bot_ignore = False     # this checks if another command is being run or not
 
     @commands.command(pass_context=True)
+    @commands.has_permissions(administrator=True)
+    async def say(self, ctx: commands.Context, *msg):
+        """
+        !say message:string
+
+        the bot will output a message in the channel this was called
+        """
+
+        msg = " ".join(msg)
+        await ctx.channel.send(msg)
+
+
+    @commands.command(pass_context=True)
     @commands.has_permissions(administrator=True)       # make sure the person executing has permissions
     async def purge(self, ctx: commands.Context, n:int):
         """
@@ -36,5 +49,5 @@ class ChatManager(commands.Cog, name="ChatManager Cog"):
         
         self.bot_ignore = False
 
-async def setup(bot: commands.Bot):
-    await bot.add_cog(ChatManager(bot), guilds=[discord.Object(id=633847600403054592)])
+def setup(bot: commands.Bot):
+    bot.add_cog(ChatManager(bot))
