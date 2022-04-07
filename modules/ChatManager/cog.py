@@ -1,6 +1,10 @@
 import discord
 from discord.ext import commands
 
+# TODO:
+#   - Delete the message which called the command
+#
+
 class ChatManager(commands.Cog, name="ChatManager Cog"):
 
     def __init__(self,  bot: commands.Bot):

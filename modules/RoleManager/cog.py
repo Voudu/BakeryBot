@@ -27,6 +27,7 @@ import emoji
 #   - rolesetchannel -> start implementation
 #   - create list of guild objects, each guild object holds that corresponding guilds data -> this is not very important considering this is only intended to run on 1 server. Good practice though
 #   - if a message is in the list but no longer exists in the server, we should remove it from the list
+#   - if someone adds an emoji thats not in the dict, remove it.
 
 class RoleManager(commands.Cog, name="Role Manager Cog"):
 
