@@ -219,10 +219,11 @@ class RoleManager(commands.Cog, name="Role Manager Cog"):
             reaction_key = emoji.demojize(reaction)             # demojize to turn 😭 into :sad: which is a key for default emoji : roles
             try:
                 roleId = self.msg_role_dict[msgId][reaction_key]
-            except KeyError as ke:
-                print(ke)
-                msg = payload.member.fetch_message(msgId)
-                await msg.clear_reaction(reaction)
+            except KeyError as ke:                          # Remove emoji added by user not reacting to get role
+                channel = self.bot.get_channel(payload.channel_id)
+                message = await channel.fetch_message(payload.message_id)
+                user = self.bot.get_user(payload.user_id)
+                await message.remove_reaction(reaction, user)
                 return
 
             guild = self.bot.get_guild(guild_id)
