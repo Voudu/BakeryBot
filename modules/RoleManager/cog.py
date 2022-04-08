@@ -21,7 +21,6 @@ import emoji
 # JSON TIP :: ALL DICT KEYS WILL NEED TO BE A STRING
 
 #   TODO
-#   - remove role on remove emoji
 #   - roleadd -> if a duplicate emoji is trying to be used make sure its not on the same message
 #                   -> this might need some tweaking?
 #   - rolesetchannel -> start implementation
@@ -194,30 +193,6 @@ class RoleManager(commands.Cog, name="Role Manager Cog"):
                 except Exception as e:
                     print(e)
 
-    # @commands.command(pass_context=True)
-    # @commands.has_permissions(administrator=True)       # make sure the person executing has permissions
-    # async def rolesetchannel(self, ctx: commands.Context, channel):
-    #     """
-    #     !rolesetchannel #channel_name
-    #     """
-    #     # split off channel input to isolate the id
-    #     channel_split = channel.split("#", 1)
-    #     if len(channel_split) > 1:
-    #         channel_split = channel_split[1].split(">", 1)
-    #         channel_id = channel_split[0]
-    #     else:
-    #         print("Invalid channel provide")
-    #         await ctx.channel.send("RoleManager: Error: use a text channel to set a role channel")
-    #         return
-
-    #     guild = ctx.guild
-
-    #     if (lambda c: c.id == channel_id, guild.text_channels):
-    #         self.channelId = channel_id
-    #         await ctx.channel.send("RoleManager: channel successfully set!")
-    #     else:
-    #         await ctx.channel.send("RoleManager: Error: channel selected does not exist, try another.")
-
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
 
@@ -235,13 +210,20 @@ class RoleManager(commands.Cog, name="Role Manager Cog"):
                     print(f"msg_role_dict loaded as: {type(self.msg_role_dict)}")
             except FileNotFoundError as fe:
                 print(fe)
+                return
         
         msgId = str(payload.message_id)
         
-        if msgId in self.msg_role_dict:                    # check if the message is in the dict
+        if msgId in self.msg_role_dict:                     # check if the message is in the dict
             reaction = str(payload.emoji)                   # reaction in form <:surprisedpikachu:899462891445559356> or 😭, which is the key to our role id
-            reaction = emoji.demojize(reaction)             # demojize to turn 😭 into :sad: which is a key for default emoji : roles
-            roleId = self.msg_role_dict[msgId][reaction]
+            reaction_key = emoji.demojize(reaction)             # demojize to turn 😭 into :sad: which is a key for default emoji : roles
+            try:
+                roleId = self.msg_role_dict[msgId][reaction_key]
+            except KeyError as ke:
+                print(ke)
+                msg = payload.member.fetch_message(msgId)
+                await msg.clear_reaction(reaction)
+                return
 
             guild = self.bot.get_guild(guild_id)
             role = guild.get_role(roleId)
