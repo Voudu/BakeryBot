@@ -5,6 +5,7 @@ from discord.ext import commands, tasks
 import discord
 import random
 import json
+from pprint import pprint
 
 # SEE: https://dev.twitch.tv/docs/api/reference#get-streams
 
@@ -20,10 +21,11 @@ class TwitchManager(commands.Cog, name="TwitchManager Cog"):
         self.twitch = Twitch(os.getenv("TWITCH_CLIENT"), os.getenv("TWITCH_SECRET"))
 
         self.loaded = False
-        self.userCheckList = []     # list of users to check for also maintains discord member id [(twitch_name, discord_member_id)]
+        self.userCheckList = [("esl_csgo", 258816610981117952)]     # list of users to check for also maintains discord member id [(twitch_name, discord_member_id)]
         self.liveList = []          # list of users who are live [twitch_username]
 
         self.promoChannelId = 961808448264233004        # CHANGE THIS ID TO THE CHANNEL YOU WANT NOTIFICATION SENT IN
+        self.checkList.start()
 
     # #############################################################################################################
     #
@@ -32,9 +34,9 @@ class TwitchManager(commands.Cog, name="TwitchManager Cog"):
     #   Every 30 seconds check users on the list for members who have went live since the last check
     #
     # #############################################################################################################
-    @tasks.loop(seconds=30)
+    @tasks.loop(seconds=5)
     async def checkList(self):
-        
+        print("checking list ...")
         #
         #   check if the userCheckList has been loaded or not yet
         #
@@ -42,7 +44,9 @@ class TwitchManager(commands.Cog, name="TwitchManager Cog"):
             self.loadData()             # list hasn't been loaded yet, load it
         
         guild = self.bot.get_guild( int(os.getenv("GUILD_ID")) )
-        channel = guild.fetch_channel(self.promoChannelId)
+        if guild is None:
+            return
+        channel = self.bot.fetch_channel(self.promoChannelId)        # BUG: need a way to get a TextChannel here without context. Can only get a GuildChannel which doesnt have a method send
 
         #
         #   iterate through userCheckList for possible notifcations to send
@@ -68,21 +72,24 @@ class TwitchManager(commands.Cog, name="TwitchManager Cog"):
                         # else, member doesnt have the "LIVE" role to remove
                     
             if stream['data'] and not isLive:                       # if stream data exists the user isn't already in the liveList
-                self.liveList.append(stream['user_login'])          # append the user who is now live
+                streamData = stream['data'][0]                      # dictionary containing stream data
+                pprint(stream)
+                self.liveList.append(streamData['user_login'])          # append the user who is now live
 
                 #
                 #   Gather data from stream for creating the embed
                 #
-                twitchDisplayName = stream['user_name']
-                twitchGameName = stream['game_name']
-                twitchTitle = stream['title']
-                # twitchStarted = stream['started_at']                       might want to use this at the footer later on
-                twitchThumbnailUrl = stream['thumbnail_url']
-                twitchUserLogin = stream['user_login']
+                twitchDisplayName = streamData['user_name']
+                twitchGameName = streamData['game_name']
+                twitchTitle = streamData['title']
+                # twitchStarted = streamData['started_at']                       might want to use this at the footer later on
+                twitchThumbnailUrl = streamData['thumbnail_url']
+                twitchUserLogin = streamData['user_login']
                 streamUrl = f"https://www.twitch.tv/{twitchUserLogin}"
 
                 # generate a random hex color
-                hexColor = hex('%02X%02X%02X' % (r(), r(), r()))
+                hexString = ('%02X%02X%02X' % (r(), r(), r()))
+                hexColor = int(hexString, 16)
 
                 #
                 #   Create the embed notification
@@ -210,7 +217,7 @@ class TwitchManager(commands.Cog, name="TwitchManager Cog"):
     #
     # #############################################################################################################
     @commands.command(pass_context=True)
-    @commands.has_permissions(administator=True)
+    @commands.has_permissions(administrator=True)
     async def twitchprint(self, ctx:commands.Context):
         
         header = "Users on the automatic twitch notifcation list\n\n"
