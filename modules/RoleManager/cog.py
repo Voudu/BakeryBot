@@ -304,5 +304,5 @@ class RoleManager(commands.Cog, name="Role Manager Cog"):
         except FileNotFoundError as fe:
             print(fe)
 
-def setup(bot: commands.Bot):
-    bot.add_cog(RoleManager(bot))
+async def setup(bot: commands.Bot):
+    await bot.add_cog(RoleManager(bot))

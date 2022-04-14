@@ -53,5 +53,5 @@ class ChatManager(commands.Cog, name="ChatManager Cog"):
         
         self.bot_ignore = False
 
-def setup(bot: commands.Bot):
-    bot.add_cog(ChatManager(bot))
+async def setup(bot: commands.Bot):
+    await bot.add_cog(ChatManager(bot))
