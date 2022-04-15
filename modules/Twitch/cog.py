@@ -38,7 +38,6 @@ class TwitchManager(commands.Cog, name="TwitchManager Cog"):
     # #############################################################################################################
     @tasks.loop(seconds=30)
     async def checkList(self):
-        print("checking list ...")
 
         guild = self.bot.get_guild( int(os.getenv("GUILD_ID")) )
         if guild is None:
