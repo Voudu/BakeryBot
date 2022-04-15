@@ -26,7 +26,7 @@ class TwitchManager(commands.Cog, name="TwitchManager Cog"):
         self.userCheckList = []     # list of users to check for also maintains discord member id [(twitch_name, discord_member_id)]
         self.liveList = []          # list of users who are live [twitch_username]
 
-        self.promoChannelId = 961808448264233004        # CHANGE THIS ID TO THE CHANNEL YOU WANT NOTIFICATION SENT IN
+        self.promoChannelId = 643167159572234261        # CHANGE THIS ID TO THE CHANNEL YOU WANT NOTIFICATION SENT IN
         self.checkList.start()
 
     # #############################################################################################################
