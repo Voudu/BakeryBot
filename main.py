@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
-from discord.ext import commands
+from discord.ext.commands import Bot
+from discord import Intents
 
 import asyncio
 import sys
@@ -10,12 +11,13 @@ load_dotenv()
 token = os.getenv("TOKEN")
 app_id = os.getenv("APP_ID")
 guild_id = os.getenv("GUILD_ID")
+intents = Intents.all()
 
 sys.path.append(".")
 
-client = commands.Bot(
+client = Bot(
     command_prefix="!",
-    intents=discord.Intents.all(),
+    intents=intents,
     application_id=app_id
 )
 
@@ -35,4 +37,4 @@ async def load_extensions():
             await client.load_extension(f"modules.{folder}.cog")    
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    client.run(token)
